@@ -9,7 +9,7 @@ import os
 # =========================
 # 🔐 ТОКЕН (вынесите в переменные окружения на Railway)
 # =========================
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.getenv("VK_TOKEN", "vk1.a.J-XTxTnnLSZnNqqtW3BsCYtCmPyPP0BpHdbViegEZFpW6Hn5MpJMSzNb_ni-681NmQqMToUgje4w_dTWuSMofIhLDxMnve33UyT1yZgB1Kbhadwsvqg9YYRVOip-p2egeaqo4GQL7JXzMHD5SybTS_wtDQpEdsHvaQJE_i8NquZoLKNJedr1BXmQVrm8YRDR8zSKKvwB6a1Q0UTCJr92bQ")
 ADMIN_ID = 492421638
 
 # =========================
