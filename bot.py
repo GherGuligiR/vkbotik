@@ -180,21 +180,21 @@ def show_scene(user_id):
 # =========================
 def show_help(user_id):
     help_text = """
-👑 **АДМИН КОМАНДЫ** 👑
+👑 АДМИН КОМАНДЫ 👑
 
 📋 `/all_scenes` - показать все сцены с выборами
 📊 `/all_choice` - показать все выборы
 
-➕ **Добавить сцену**: `/add_scene (название) | (текст)`
-❌ **Удалить сцену**: `/delete_scene (название)`
+➕ Добавить сцену: `/add_scene (название) | (текст)`
+❌ Удалить сцену: `/delete_scene (название)`
 
-✏️ **Редактировать сцену**: `/edit_scene (название) | (новый текст)`
+✏️ Редактировать сцену: `/edit_scene (название) | (новый текст)`
 
-📝 **Добавить выбор**: `/add_choice (сцена) | (текст) | (след.сцена) | water(+/-число) | health(+/-число)`
+📝 Добавить выбор: `/add_choice (сцена) | (текст) | (след.сцена) | water(+/-число) | health(+/-число)`
 
-🔧 **Редактировать выбор**: `/edit_choice (ID) | (сцена) | (текст) | (след.сцена) | water(+/-число) | health(+/-число)`
+🔧 Редактировать выбор: `/edit_choice (ID) | (сцена) | (текст) | (след.сцена) | water(+/-число) | health(+/-число)`
 
-🗑 **Удалить выбор**: `/delete_choice (ID)`
+🗑 Удалить выбор: `/delete_choice (ID)`
 """
     send_message(user_id, help_text, admin_keyboard())
 
@@ -202,16 +202,16 @@ def show_all_scenes(user_id):
     cursor.execute("SELECT Scene, Text FROM Scenes")
     scenes = cursor.fetchall()
     
-    msg = "📍 **ВСЕ СЦЕНЫ** 📍\n\n"
+    msg = "📍 ВСЕ СЦЕНЫ 📍\n\n"
     
     for scene_name, scene_text in scenes:
-        msg += f"🎬 **{scene_name}**\n📝 {scene_text[:100]}...\n"
+        msg += f"🎬 {scene_name}\n📝 {scene_text[:100]}...\n"
         
         cursor.execute("SELECT ChoiceText, NextScene, WaterEffect, HealthEffect FROM Choices WHERE SceneId=?", (scene_name,))
         choices = cursor.fetchall()
         
         if choices:
-            msg += "🔹 **Выборы:**\n"
+            msg += "🔹 Выборы:\n"
             for c in choices:
                 water = f"+{c[2]}" if c[2] >= 0 else str(c[2])
                 health = f"+{c[3]}" if c[3] >= 0 else str(c[3])
@@ -231,7 +231,7 @@ def show_all_choices(user_id):
     cursor.execute("SELECT Id, SceneId, ChoiceText, NextScene, WaterEffect, HealthEffect FROM Choices")
     choices = cursor.fetchall()
     
-    msg = "📊 **ВСЕ ВЫБОРЫ** 📊\n\n"
+    msg = "📊 ВСЕ ВЫБОРЫ 📊\n\n"
     
     for c in choices:
         water = f"+{c[4]}" if c[4] >= 0 else str(c[4])
@@ -259,9 +259,9 @@ def add_scene(user_id, args):
             (scene_name, scene_text)
         )
         conn.commit()
-        send_message(user_id, f"✅ Сцена **{scene_name}** добавлена!")
+        send_message(user_id, f"✅ Сцена {scene_name} добавлена!")
     except sqlite3.IntegrityError:
-        send_message(user_id, f"❌ Сцена **{scene_name}** уже существует!")
+        send_message(user_id, f"❌ Сцена {scene_name} уже существует!")
     except Exception as e:
         send_message(user_id, f"❌ Ошибка: {e}")
 
@@ -270,7 +270,7 @@ def delete_scene(user_id, scene_name):
     cursor.execute("DELETE FROM Choices WHERE SceneId=?", (scene_name,))
     cursor.execute("DELETE FROM Scenes WHERE Scene=?", (scene_name,))
     conn.commit()
-    send_message(user_id, f"🗑 Сцена **{scene_name}** и все её выборы удалены!")
+    send_message(user_id, f"🗑 Сцена {scene_name} и все её выборы удалены!")
 
 def edit_scene(user_id, args):
     try:
@@ -285,9 +285,9 @@ def edit_scene(user_id, args):
         conn.commit()
         
         if cursor.rowcount > 0:
-            send_message(user_id, f"✅ Сцена **{scene_name}** обновлена!")
+            send_message(user_id, f"✅ Сцена {scene_name} обновлена!")
         else:
-            send_message(user_id, f"❌ Сцена **{scene_name}** не найдена!")
+            send_message(user_id, f"❌ Сцена {scene_name} не найдена!")
     except Exception as e:
         send_message(user_id, f"❌ Ошибка: {e}")
 
@@ -311,7 +311,7 @@ def add_choice(user_id, args):
         """, (scene_id, choice_text, next_scene, water, health, karma))
         conn.commit()
         
-        send_message(user_id, f"✅ Выбор **{choice_text}** добавлен в сцену **{scene_id}**!")
+        send_message(user_id, f"✅ Выбор {choice_text} добавлен в сцену {scene_id}!")
     except Exception as e:
         send_message(user_id, f"❌ Ошибка: {e}")
 
@@ -338,9 +338,9 @@ def edit_choice(user_id, args):
         conn.commit()
         
         if cursor.rowcount > 0:
-            send_message(user_id, f"✅ Выбор ID **{choice_id}** обновлён!")
+            send_message(user_id, f"✅ Выбор ID {choice_id} обновлён!")
         else:
-            send_message(user_id, f"❌ Выбор ID **{choice_id}** не найден!")
+            send_message(user_id, f"❌ Выбор ID {choice_id} не найден!")
     except Exception as e:
         send_message(user_id, f"❌ Ошибка: {e}")
 
@@ -351,9 +351,9 @@ def delete_choice(user_id, choice_id):
         conn.commit()
         
         if cursor.rowcount > 0:
-            send_message(user_id, f"🗑 Выбор ID **{choice_id}** удалён!")
+            send_message(user_id, f"🗑 Выбор ID {choice_id} удалён!")
         else:
-            send_message(user_id, f"❌ Выбор ID **{choice_id}** не найден!")
+            send_message(user_id, f"❌ Выбор ID {choice_id} не найден!")
     except Exception as e:
         send_message(user_id, f"❌ Ошибка: {e}")
 
@@ -385,16 +385,16 @@ while True:
                 player = get_player(user_id)
                 if not player:
                     create_player(user_id)
-                    welcome_msg = """🏜️ **ДОБРО ПОЖАЛОВАТЬ НА АРРАКИС** 🏜️
+                    welcome_msg = """🏜️ ДОБРО ПОЖАЛОВАТЬ НА АРРАКИС 🏜️
 
 Ты прибыл на планету пустыни, где вода дороже золота, а песчаные черви правят подземным миром.
 
-**Как играть:**
+Как играть:
 • Нажимай на кнопки с номерами вариантов
 • Следи за 💧 водой и ❤️ здоровьем
 • Твои решения влияют на судьбу
 
-**Команды:**
+Команды:
 🎮 Начать - продолжить игру
 📜 Меню - показать команды
 🔄 Сбросить прогресс - начать заново
@@ -466,13 +466,13 @@ while True:
                     continue
                 
                 elif msg == "📜 меню" or msg == "меню":
-                    menu_text = """📜 **ДОСТУПНЫЕ КОМАНДЫ** 📜
+                    menu_text = """📜 ДОСТУПНЫЕ КОМАНДЫ 📜
 
-🎮 **Начать** - продолжить игру с последнего сохранения
-🔄 **Сбросить прогресс** - начать игру заново
-📜 **Меню** - показать это сообщение
+🎮 Начать - продолжить игру с последнего сохранения
+🔄 Сбросить прогресс - начать игру заново
+📜 Меню - показать это сообщение
 
-**Как играть:**
+Как играть:
 Просто нажимай на кнопки с цифрами (1, 2, 3...)
 Твои решения влияют на сюжет!
 
@@ -522,7 +522,7 @@ while True:
                     else:
                         send_message(
                             user_id,
-                            "🌪️ **Буря засвистела меж вами, рассказчик не услышал вас...**\n\nПовторите свой выбор или напишите «Меню»",
+                            "🌪️ Буря засвистела меж вами, рассказчик не услышал вас...\n\nПовторите свой выбор или напишите «Меню»",
                             main_keyboard(user_id == ADMIN_ID)
                         )
     
